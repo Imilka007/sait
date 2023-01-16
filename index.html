@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Статус Imilka</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <style type="text/css">
+        html {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(40% 50%, #1FE854, #3F95AB);
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+            font-size: 200%;
+        }
+
+        input[type=text] {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-style: hidden;
+            border-radius: 10px 10px 10px 10px;
+            color: #ee6123;
+            margin-bottom: 10px;
+            font-size: 150%;
+        }
+
+        button {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 10px 10px 10px 10px;
+            
+            font-size: 200%;
+        }
+
+        button:hover {
+                color: #ff6a00;
+            }
+
+        .rainbow {
+            text-align: center;
+            text-decoration: underline;
+            font-size: 32px;
+            font-family: monospace;
+            letter-spacing: 5px;
+        }
+
+        .rainbow_text_animated {
+            background: linear-gradient(to right, #ff0000, #ff6a00, #ff6a00, #ffd800, #b6ff00, #4cff00, #00ff21, #00ff90, #00ffff, #0094ff, #0026ff, #b200ff, #ff00dc, #ff006e, #ff006e);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow_animation 6s ease-in-out infinite;
+            background-size: 400% 100%;
+        }
+
+        .rainbow_t {
+            background: linear-gradient(to right, #ff0000, #ff6a00, #ff6a00, #ffd800, #b6ff00, #4cff00, #00ff21, #00ff90, #00ffff, #0094ff, #0026ff, #b200ff, #ff00dc, #ff006e, #ff006e);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow_animation 10s ease-in-out infinite;
+            background-size: 400% 100%;
+        }
+
+        @keyframes rainbow_animation {
+            0%,100% {
+                background-position: 0 0;
+            }
+
+            50% {
+                background-position: 100% 0;
+            }
+        }
+
+        #shadowBox {
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+        function sleep(ms) {
+            return (
+                new Promise(function (resolve, reject) {
+                    setTimeout(function () { resolve(); }, ms);
+                })
+            );
+        }
+
+        function my() {
+            if (document.getElementsByName("text")[0].value == "") {
+                document.getElementById('shadowBox').innerHTML = 'Пустая строчка!';
+                sleep(2000).then(function () {
+                    document.getElementById('shadowBox').innerHTML = 'Введите текст для статуса';
+                });
+                return;
+            }
+            fetch("http://127.0.0.1:5000/text", {
+                method: 'POST',
+                body: "text="+document.getElementsByName("text")[0].value,
+  headers: { 'Content-type': 'application/x-www-form-urlencoded' }
+            });).then(resp => resp.text()).then(razm => {
+//alert("+")
+                document.getElementById('shadowBox').innerHTML = razm;
+                sleep(2000).then(function () {
+                    document.getElementById('shadowBox').innerHTML = 'Введите текст для статуса';
+                    if (razm == "Успешно!") window.open("https://vk.com/imilka007").focus();
+                });
+            });
+}
+    </script>
+
+    <div class="container"><h1 class="rainbow rainbow_text_animated" id="shadowBox">Введите текст для статуса</h1>
+        <input type="text" name="text"></input>
+        <button name="button" class="rai rainbow_t" id="shadow" onClick="my()">Подтвердить</button>
+    </h1>
+</body>
+</html>
